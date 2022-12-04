@@ -64,7 +64,8 @@ class EditablePage extends React.Component {
             heading 1
           </p>
         </div>
-        {this.state.blocks.map((block, key) => {
+
+        {this.state.blocks.map((block) => {
           return (
             <>
               {block.html !== "" ? (
@@ -76,7 +77,7 @@ class EditablePage extends React.Component {
                 </div>
               ) : null}
               <EditableBlock
-                key={key}
+                key={block.id}
                 id={block.id}
                 tag={block.tag}
                 html={block.html}
