@@ -67,9 +67,9 @@ class EditablePage extends React.Component {
 
         {this.state.blocks.map((block) => {
           return (
-            <>
+            <div key={block.id}>
               {block.html !== "" ? (
-                <div className="border text-start">
+                <div key={block.id} className="border text-start">
                   <span className="fw-bold time-post p-1">P</span>
                   <span>
                     <Moment fromNow>{block.id}</Moment>
@@ -85,7 +85,7 @@ class EditablePage extends React.Component {
                 addBlock={this.addBlockHandler}
                 deleteBlock={this.deleteBlockHandler}
               />
-            </>
+            </div>
           );
         })}
       </div>
