@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
+  faChevronDown,
   faBookOpen,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
@@ -31,7 +32,12 @@ const NavBar = () => {
               </span>
               Editing
             </li>
-            <li className="ps-3">Publish Space</li>
+            <li className="ps-3 dark-blue fw-bold">
+              Publish Space
+              <span className="ms-1">
+                <FontAwesomeIcon icon={faChevronDown} />
+              </span>
+            </li>
           </ul>
         </div>
       </div>

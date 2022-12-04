@@ -15,3 +15,11 @@ code {
 .smallText {
   font-size: 12px;
 }
+
+.dark-blue {
+  color: #6a6afc;
+}
+.editor-frame {
+  width: 70%;
+  margin: 0 auto;
+}
