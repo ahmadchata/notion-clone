@@ -1,63 +1,95 @@
-import Editor from "./editor";
-import { useState } from "react";
-import moveCaret from "../utils/caret";
+import React from "react";
+import uid from "../utils/id";
+import setCaretToEnd from "../utils/caret";
+import EditableBlock from "./editor";
+import Moment from "react-moment";
 
-const EditorPage = () => {
-  const [block, setBlock] = useState([{ html: "", tag: "h1" }]);
+const initialBlock = { id: uid(), html: "", tag: "p" };
 
-  const updatePageHandler = (updatedBlock) => {
-    const index = block.map((b, i) => i).indexOf(updatedBlock);
-    const updatedBlocks = [...block];
+class EditablePage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { blocks: [initialBlock] };
+  }
+
+  updatePageHandler = (updatedBlock) => {
+    const blocks = this.state.blocks;
+    const index = blocks.map((b) => b.id).indexOf(updatedBlock.id);
+    const updatedBlocks = [...blocks];
     updatedBlocks[index] = {
       ...updatedBlocks[index],
       tag: updatedBlock.tag,
       html: updatedBlock.html,
     };
-    setBlock(updatedBlocks);
+    this.setState({ blocks: updatedBlocks });
   };
 
-  const addBlockHandler = (currentBlock) => {
-    const newBlock = { html: "", tag: "h1" };
-    const index = block.map((b, i) => i).indexOf(currentBlock);
-    const updatedBlocks = [...block];
+  addBlockHandler = (currentBlock) => {
+    const newBlock = { id: uid(), html: "", tag: "p" };
+    const blocks = this.state.blocks;
+    const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
+    const updatedBlocks = [...blocks];
     updatedBlocks.splice(index + 1, 0, newBlock);
-    setBlock(updatedBlocks, () => {
+    this.setState({ blocks: updatedBlocks }, () => {
       currentBlock.ref.nextElementSibling.focus();
     });
   };
 
-  const deleteBlockHandler = (currentBlock) => {
+  deleteBlockHandler = (currentBlock) => {
     const previousBlock = currentBlock.ref.previousElementSibling;
     if (previousBlock) {
-      const index = block.map((b, i) => i).indexOf(currentBlock);
-      const updatedBlocks = [...block];
+      const blocks = this.state.blocks;
+      const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
+      const updatedBlocks = [...blocks];
       updatedBlocks.splice(index, 1);
-      setBlock(updatedBlocks, () => {
-        moveCaret(previousBlock);
+      this.setState({ blocks: updatedBlocks }, () => {
+        setCaretToEnd(previousBlock);
         previousBlock.focus();
       });
     }
   };
-  return (
-    <div className="editor-frame mt-5">
-      <h2 className="fw-bold">
-        Welcome to Notiom. It's like Notion but not as good 😀
-      </h2>
-      <p>You can add a text by typing / then 1</p>
-      <div>
-        {block.map((block, key) => (
-          <Editor
-            key={key}
-            tag={block.tag}
-            html={block.html}
-            updatePage={updatePageHandler}
-            addBlock={addBlockHandler}
-            deleteBlock={deleteBlockHandler}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
 
-export default EditorPage;
+  render() {
+    return (
+      <div className="editor-frame">
+        <div className="my-5 text-start">
+          <h2 className="fw-bold">
+            Welcome to Motiom, It's like Notion but better 😀
+          </h2>
+          <p>
+            To create a text, type{" "}
+            <span className="text-bg py-1 px-2 rounded">/</span> then{" "}
+            <span className="text-bg py-1 px-2 rounded">1</span> then hit{" "}
+            <span className="text-bg py-1 px-2 rounded">Enter</span> to select
+            heading 1
+          </p>
+        </div>
+        {this.state.blocks.map((block, key) => {
+          return (
+            <>
+              {block.html !== "" ? (
+                <div className="border text-start">
+                  <span className="fw-bold time-post p-1">P</span>
+                  <span>
+                    <Moment fromNow>{block.id}</Moment>
+                  </span>
+                </div>
+              ) : null}
+              <EditableBlock
+                key={key}
+                id={block.id}
+                tag={block.tag}
+                html={block.html}
+                updatePage={this.updatePageHandler}
+                addBlock={this.addBlockHandler}
+                deleteBlock={this.deleteBlockHandler}
+              />
+            </>
+          );
+        })}
+      </div>
+    );
+  }
+}
+
+export default EditablePage;

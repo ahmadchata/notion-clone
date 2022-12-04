@@ -19,7 +19,30 @@ code {
 .dark-blue {
   color: #6a6afc;
 }
+
 .editor-frame {
-  width: 70%;
+  width: 65%;
   margin: 0 auto;
+}
+
+.text-bg {
+  background: #d4d2d2;
+}
+
+.editor-form {
+  margin-top: 1rem;
+  outline: none;
+  border-bottom: 1px solid #f3eaea;
+}
+
+.select-menu {
+  width: 100px;
+  background: #d3d1d1;
+  border-radius: 10px;
+  padding: 10px 0;
+}
+
+.time-post {
+  background: #affeaf;
+  color: #4a4a9d;
 }
