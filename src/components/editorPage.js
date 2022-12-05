@@ -1,96 +1,152 @@
-import React from "react";
-import uid from "../utils/id";
-import setCaretToEnd from "../utils/caret";
+import { useState, useEffect } from "react";
 import EditableBlock from "./editor";
-import Moment from "react-moment";
+import usePrevious from "../hooks/usePrevious";
+import objectId from "../utils/id";
+import setCaretToEnd from "../utils/caret";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faClock,
+  faCircle,
+  faArrowDown,
+  faCircleCheck,
+  faCloud,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 
-const initialBlock = { id: uid(), html: "", tag: "p" };
+// A page is represented by an array containing several blocks
+const fetchedBlocks = [
+  {
+    _id: objectId(),
+    html: "",
+    tag: "p",
+  },
+];
 
-class EditablePage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { blocks: [initialBlock] };
-  }
+const EditablePage = () => {
+  const [blocks, setBlocks] = useState(fetchedBlocks);
+  const [currentBlockId, setCurrentBlockId] = useState(null);
 
-  updatePageHandler = (updatedBlock) => {
-    const blocks = this.state.blocks;
-    const index = blocks.map((b) => b.id).indexOf(updatedBlock.id);
+  const prevBlocks = usePrevious(blocks);
+
+  // Handling the cursor and focus on adding and deleting blocks
+  useEffect(() => {
+    // If a new block was added, move the caret to it
+    if (prevBlocks && prevBlocks.length + 1 === blocks.length) {
+      const nextBlockPosition =
+        blocks.map((b) => b._id).indexOf(currentBlockId) + 1 + 1;
+      const nextBlock = document.querySelector(
+        `[data-position="${nextBlockPosition}"]`
+      );
+      if (nextBlock) {
+        nextBlock.focus();
+      }
+    }
+
+    // If a block was deleted, move the caret to the end of the last block
+    if (prevBlocks && prevBlocks.length - 1 === blocks.length) {
+      const lastBlockPosition = prevBlocks
+        .map((b) => b._id)
+        .indexOf(currentBlockId);
+      const lastBlock = document.querySelector(
+        `[data-position="${lastBlockPosition}"]`
+      );
+      if (lastBlock) {
+        setCaretToEnd(lastBlock);
+      }
+    }
+  }, [blocks, prevBlocks, currentBlockId]);
+
+  const updateBlockHandler = (currentBlock) => {
+    const index = blocks.map((b) => b._id).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
     updatedBlocks[index] = {
       ...updatedBlocks[index],
-      tag: updatedBlock.tag,
-      html: updatedBlock.html,
+      tag: currentBlock.tag,
+      html: currentBlock.html,
     };
-    this.setState({ blocks: updatedBlocks });
+    setBlocks(updatedBlocks);
   };
 
-  addBlockHandler = (currentBlock) => {
-    const newBlock = { id: uid(), html: "", tag: "p" };
-    const blocks = this.state.blocks;
-    const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
+  const addBlockHandler = (currentBlock) => {
+    setCurrentBlockId(currentBlock.id);
+    const index = blocks.map((b) => b._id).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
+    const newBlock = { _id: objectId(), tag: "p", html: "" };
     updatedBlocks.splice(index + 1, 0, newBlock);
-    this.setState({ blocks: updatedBlocks }, () => {
-      currentBlock.ref.nextElementSibling.focus();
-    });
+    updatedBlocks[index] = {
+      ...updatedBlocks[index],
+      tag: currentBlock.tag,
+      html: currentBlock.html,
+    };
+    setBlocks(updatedBlocks);
   };
 
-  deleteBlockHandler = (currentBlock) => {
-    const previousBlock = currentBlock.ref.previousElementSibling;
-    if (previousBlock) {
-      const blocks = this.state.blocks;
-      const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
+  const deleteBlockHandler = (currentBlock) => {
+    if (blocks.length > 1) {
+      setCurrentBlockId(currentBlock.id);
+      const index = blocks.map((b) => b._id).indexOf(currentBlock.id);
       const updatedBlocks = [...blocks];
       updatedBlocks.splice(index, 1);
-      this.setState({ blocks: updatedBlocks }, () => {
-        setCaretToEnd(previousBlock);
-        previousBlock.focus();
-      });
+      setBlocks(updatedBlocks);
     }
   };
 
-  render() {
-    return (
-      <div className="editor-frame">
-        <div className="my-5 text-start">
-          <h2 className="fw-bold">
-            Welcome to Motiom, It's like Notion but better 😀
-          </h2>
-          <p>
-            To create a text, type{" "}
-            <span className="text-bg py-1 px-2 rounded">/</span> then{" "}
-            <span className="text-bg py-1 px-2 rounded">1</span> then hit{" "}
-            <span className="text-bg py-1 px-2 rounded">Enter</span> to select
-            heading 1
+  return (
+    <>
+      <div className="editor-frame mt-4">
+        <div className="d-flex justify-content-between border rounded py-2 px-1 text-muted fw-bold smallText">
+          <div>
+            <span className="fw-bold time-post p-1">P</span>
+            <span className="border-start border-end px-2 ms-2">
+              <FontAwesomeIcon icon={faClock} /> 0min
+            </span>
+            <span className="border-end px-2">
+              <FontAwesomeIcon icon={faCircle} color="#ff6170" size="lg" />
+            </span>
+            <span className="px-2">
+              <FontAwesomeIcon icon={faArrowDown} /> 0
+            </span>
+          </div>
+          <div>
+            <span>
+              <FontAwesomeIcon icon={faCircleCheck} />
+            </span>
+            <span className="mx-2">
+              <FontAwesomeIcon icon={faCloud} color="#cffae7" />
+            </span>
+            <span>
+              <FontAwesomeIcon icon={faEllipsisVertical} />
+            </span>
+          </div>
+        </div>
+        <div className="text-start mb-5">
+          <h1 className="fw-bold mt-4 border-bottom pb-2">
+            Front-end developer test project
+          </h1>
+          <p className="smallText fw-bold text-muted">
+            Your goal is to make a page that looks exactly like this one, one
+            has the ability to create H1 simply by typing / then 1, then typing
+            text, and hitting enter
           </p>
         </div>
-
-        {this.state.blocks.map((block) => {
+        {blocks.map((block) => {
+          const position = blocks.map((b) => b._id).indexOf(block._id) + 1;
           return (
-            <div key={block.id}>
-              {block.html !== "" ? (
-                <div key={block.id} className="border text-start">
-                  <span className="fw-bold time-post p-1">P</span>
-                  <span>
-                    <Moment fromNow>{block.id}</Moment>
-                  </span>
-                </div>
-              ) : null}
-              <EditableBlock
-                key={block.id}
-                id={block.id}
-                tag={block.tag}
-                html={block.html}
-                updatePage={this.updatePageHandler}
-                addBlock={this.addBlockHandler}
-                deleteBlock={this.deleteBlockHandler}
-              />
-            </div>
+            <EditableBlock
+              key={block._id}
+              position={position}
+              id={block._id}
+              tag={block.tag}
+              html={block.html}
+              addBlock={addBlockHandler}
+              deleteBlock={deleteBlockHandler}
+              updateBlock={updateBlockHandler}
+            />
           );
         })}
       </div>
-    );
-  }
-}
+    </>
+  );
+};
 
 export default EditablePage;

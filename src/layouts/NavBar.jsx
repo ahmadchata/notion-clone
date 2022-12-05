@@ -9,7 +9,7 @@ import {
 const NavBar = () => {
   return (
     <>
-      <div className="d-flex justify-content-between text-muted smallText pt-2 px-2">
+      <div className="d-flex justify-content-between text-muted smallText pt-2 px-2 fw-bold">
         <div>
           <ul className="list-unstyled d-flex">
             <li className="me-4">

@@ -17,11 +17,11 @@ code {
 }
 
 .dark-blue {
-  color: #6a6afc;
+  color: #512ec4;
 }
 
 .editor-frame {
-  width: 65%;
+  width: 50%;
   margin: 0 auto;
 }
 
@@ -43,6 +43,12 @@ code {
 }
 
 .time-post {
-  background: #affeaf;
-  color: #4a4a9d;
+  background: #cffae7;
+  color: #35967a;
+}
+
+.place-holder {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b6b1b1;
 }
