@@ -45,7 +45,7 @@ class EditableBlock extends React.Component {
     const hasPlaceholder = this.addPlaceholder({
       block: this.contentEditable.current,
       position: this.props.position,
-      content: this.props.html || this.props.imageUrl,
+      content: this.props.html,
     });
     if (!hasPlaceholder) {
       this.setState({
@@ -93,7 +93,7 @@ class EditableBlock extends React.Component {
     const hasPlaceholder = this.addPlaceholder({
       block: this.contentEditable.current,
       position: this.props.position,
-      content: this.state.html || this.state.imageUrl,
+      content: this.state.html,
     });
     if (!hasPlaceholder) {
       this.setState({ ...this.state, isTyping: false });
@@ -121,7 +121,6 @@ class EditableBlock extends React.Component {
         id: this.props.id,
         html: this.state.html,
         tag: this.state.tag,
-        imageUrl: this.state.imageUrl,
         ref: this.contentEditable.current,
       });
     }
@@ -158,7 +157,6 @@ class EditableBlock extends React.Component {
   }
 
   // Convert editableBlock shape based on the chosen tag
-  // i.e. img = display <div><input /><img /></div> (input picker is hidden)
   // i.e. every other tag = <ContentEditable /> with its tag and html content
   handleTagSelection(tag) {
     if (this.state.isTyping) {
@@ -182,7 +180,7 @@ class EditableBlock extends React.Component {
       this.setState({
         ...this.state,
         html: "Type / for blocks, @ to link docs or people",
-        tag: "h1",
+        tag: "p",
         placeholder: true,
         isTyping: false,
       });
@@ -193,7 +191,6 @@ class EditableBlock extends React.Component {
   }
 
   // If the user types the "/" command, the tag selector menu should be displayed above
-  // If it is triggered by the action menu, it should be positioned relatively to its initiator
   calculateTagSelectorMenuPosition(initiator) {
     if (initiator === "KEY_CMD") {
       const { x: caretLeft, y: caretTop } = getCaretCoordinates(true);
@@ -215,9 +212,9 @@ class EditableBlock extends React.Component {
         )}
 
         <div className="d-flex">
-          {!this.state.placeholder ? (
-            <span role="button" className="pt-1">
-              <FontAwesomeIcon icon={faBars} />
+          {this.state.isTyping ? (
+            <span role="button" className="pt-1 me-2">
+              <FontAwesomeIcon icon={faBars} color="#aeaeae" />
             </span>
           ) : null}
           <ContentEditable

@@ -14,16 +14,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 // A page is represented by an array containing several blocks
-const fetchedBlocks = [
-  {
-    _id: objectId(),
-    html: "",
-    tag: "p",
-  },
-];
+// const fetchedBlocks = [
+//   {
+//     _id: objectId(),
+//     html: "",
+//     tag: "",
+//   },
+// ];
 
 const EditablePage = () => {
-  const [blocks, setBlocks] = useState(fetchedBlocks);
+  const [blocks, setBlocks] = useState([{}]);
   const [currentBlockId, setCurrentBlockId] = useState(null);
 
   const prevBlocks = usePrevious(blocks);
@@ -120,13 +120,13 @@ const EditablePage = () => {
           </div>
         </div>
         <div className="text-start mb-5">
-          <h1 className="fw-bold mt-4 border-bottom pb-2">
+          <h2 className="fw-bold mt-4 border-bottom pb-2">
             Front-end developer test project
-          </h1>
+          </h2>
           <p className="smallText fw-bold text-muted">
             Your goal is to make a page that looks exactly like this one, one
             has the ability to create H1 simply by typing / then 1, then typing
-            text, and hitting enter
+            text, and hitting ENTER / RETURN
           </p>
         </div>
         {blocks.map((block) => {

@@ -9,19 +9,19 @@ const allowedTags = [
     id: "page-title",
     tag: "h1",
     label: "Heading 1",
-    shortcut: "Shortcut: Type 1",
+    shortcut: "Shortcut: Type 1 and hit enter",
   },
   {
     id: "heading",
     tag: "h2",
     label: "Heading 2",
-    shortcut: "Shortcut: Type 2",
+    shortcut: "Shortcut: Type 2 and hit enter",
   },
   {
     id: "subheading",
     tag: "h3",
     label: "Heading 3",
-    shortcut: "Shortcut: Type 3",
+    shortcut: "Shortcut: Type 3 and hit enter",
   },
 ];
 
@@ -77,7 +77,7 @@ const TagSelectorMenu = ({ position, closeMenu, handleSelection }) => {
 
   return (
     <div
-      className="select-menu border text-start p-2 shadow"
+      className="select-menu border text-start px-2 pt-3 shadow"
       style={{
         top: y,
         left: x,
