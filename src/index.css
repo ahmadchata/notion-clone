@@ -16,6 +16,17 @@ code {
   font-size: 12px;
 }
 
+.normalText {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.icon {
+  font-size: 35px;
+  color: #aeaeae;
+  font-weight: 900;
+}
+
 .dark-blue {
   color: #512ec4;
 }
@@ -25,10 +36,6 @@ code {
   margin: 0 auto;
 }
 
-.text-bg {
-  background: #d4d2d2;
-}
-
 .editor-form {
   margin-top: 1rem;
   outline: none;
@@ -36,9 +43,9 @@ code {
 }
 
 .select-menu {
-  width: 100px;
-  background: #d3d1d1;
-  border-radius: 10px;
+  width: 270px;
+  background: #fff;
+  border-radius: 3px;
   padding: 10px 0;
 }
 
@@ -51,4 +58,8 @@ code {
   font-size: 12px;
   font-weight: 600;
   color: #b6b1b1;
+}
+
+.grayText {
+  color: #c8c6c6;
 }

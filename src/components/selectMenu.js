@@ -1,22 +1,27 @@
 import { useState, useEffect } from "react";
 import { matchSorter } from "match-sorter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faT } from "@fortawesome/free-solid-svg-icons";
 
 const MENU_HEIGHT = 150;
 const allowedTags = [
   {
     id: "page-title",
     tag: "h1",
-    label: "Page Title",
+    label: "Heading 1",
+    shortcut: "Shortcut: Type 1",
   },
   {
     id: "heading",
     tag: "h2",
-    label: "Heading",
+    label: "Heading 2",
+    shortcut: "Shortcut: Type 2",
   },
   {
     id: "subheading",
     tag: "h3",
-    label: "Subheading",
+    label: "Heading 3",
+    shortcut: "Shortcut: Type 3",
   },
 ];
 
@@ -72,24 +77,35 @@ const TagSelectorMenu = ({ position, closeMenu, handleSelection }) => {
 
   return (
     <div
-      className="select-menu"
+      className="select-menu border text-start p-2 shadow"
       style={{
         top: y,
         left: x,
         justifyContent: !isMenuOutsideOfTopViewport ? "flex-end" : "flex-start",
       }}
     >
-      <div>
+      <div className="">
+        <h6 className="normalText">Add blocks</h6>
+        <p className="smallText fw-bold grayText">
+          Keep typing to filter, or escape to exit
+        </p>
         {tagList.map((tag, key) => {
           return (
             <div
+              className="d-flex mb-2 ps-2"
               key={key}
               data-tag={tag.tag}
               role="button"
               tabIndex="0"
               onClick={() => handleSelection(tag.tag)}
             >
-              {tag.label}
+              <span>
+                <FontAwesomeIcon icon={faT} className="icon" />
+              </span>
+              <div className="ms-2">
+                <p className="m-0 fw-bold">{tag.label}</p>
+                <p className="m-0 smallText grayText">{tag.shortcut}</p>
+              </div>
             </div>
           );
         })}
